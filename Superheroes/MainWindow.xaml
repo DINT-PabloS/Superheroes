@@ -1,0 +1,112 @@
+﻿<Window x:Class="Superheroes.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Superheroes"
+        mc:Ignorable="d"
+        Title="Superhéroes" Height="500" Width="700"  MinHeight="500" MinWidth="700">
+    <Window.Resources>
+        <Style TargetType="Image" x:Key="superheroImage">
+            <Setter Property="Opacity" Value="0.5"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="1"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="Border">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=ImagenHeroe, Path=IsMouseOver}" Value="True">
+                    <Setter Property="BorderThickness" Value="4"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="DockPanel" x:Key="principal">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=Personaje.Heroe}" Value="True">
+                    <Setter Property="Background" Value="PaleGreen"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=Personaje.Heroe}" Value="False">
+                    <Setter Property="Background" Value="Red"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="Image" x:Key="AvenG">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Width" Value="40"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=Personaje.Vengador}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=Personaje.Vengador}" Value="False">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="Image" x:Key="EquisMen">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Width" Value="40"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=Personaje.Xmen}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=Personaje.Xmen}" Value="False">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="superNombre">
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="MouseEnter">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="FontSize" To="1" Duration="0:0:0:1"></DoubleAnimation>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="MouseLeave">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="FontSize" To="40" Duration="0:0:0:1"></DoubleAnimation>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Style.Triggers>
+        </Style>
+
+    </Window.Resources>
+    <DockPanel x:Name="superheroeGrid" Style="{StaticResource ResourceKey=principal}">
+        <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="10,5,10,0">
+            <TextBlock Style="{StaticResource ResourceKey=superNombre}" DockPanel.Dock="Left" Text="{Binding Path=Personaje.Nombre}" Foreground="White" FontWeight="Bold" FontSize="40"  >
+                <TextBlock.Effect>
+                    <DropShadowEffect/>
+                </TextBlock.Effect>
+            </TextBlock>
+            <Image DockPanel.Dock="Right" Source="resoruces/xmen.png" Style="{StaticResource EquisMen}"></Image>
+            <Image DockPanel.Dock="Right" Source="resoruces/avengers.png" Style="{StaticResource AvenG}"></Image>
+
+        </DockPanel>
+
+        <StackPanel DockPanel.Dock="Bottom"  Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+            <Image x:Name="arrowLeftImage" Tag="-"  Source="resoruces/arrow.png" Width="25" MouseLeftButtonDown="Button_Click"></Image>
+            <TextBlock x:Name="superheroePosicion" Tag="0" Text="{Binding Path=Posicion}" FontSize="20" FontWeight="Bold" VerticalAlignment="Top" Margin="3,0,3,0"/>
+            <TextBlock Tag="0" Text="/" FontSize="20" FontWeight="Bold" VerticalAlignment="Top" Margin="3,0,3,0"/>
+            <TextBlock x:Name="superheroeTotal" Tag="0" Text="{Binding Path=Total}" FontSize="20" FontWeight="Bold" VerticalAlignment="Top" Margin="3,0,3,0"/>
+            <Image x:Name="arrowRightImage" Tag="+" Source="resoruces/arrow.png" Width="25" RenderTransformOrigin="0.5,0.5" MouseLeftButtonDown="Button_Click" >
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleY="1" ScaleX="-1"/>
+                        <SkewTransform AngleY="0" AngleX="0"/>
+                        <RotateTransform Angle="0"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
+        </StackPanel>
+        <Border BorderBrush="Black" Margin="10">
+            <Image x:Name="ImagenHeroe" Style="{StaticResource ResourceKey=superheroImage}" Source="{Binding Path=Personaje.Imagen}" Stretch="UniformToFill"/>
+        </Border>
+    </DockPanel>
+</Window>
